@@ -33,7 +33,7 @@ class TicTacToe:
             self.game_board[row][col] = "X"
             self.buttons[row][col].config(text="X", state=tk.DISABLED)
             if self.check_winner("X"):
-                messagebox.showinfo("Победа!", "Поздравляем, вы выиграли!")
+                messagebox.showinfo("Победа!", "Поздравляем, вы выиграли! (но этого не должно было случиться!)")
                 self.reset_board()
             elif self.check_tie():
                 messagebox.showinfo("Ничья", "Ничья!")
@@ -76,8 +76,9 @@ class TicTacToe:
             for col in range(3):
                 self.buttons[row][col].config(text="", state=tk.NORMAL)
 
-    # AI пытаеся победить игрока и блокировать ему ходы
+    # робот пытаеся победить игрока и блокировать его ходы
     def find_best_move(self):
+        # Проверка, может ли AI выиграть
         for row in range(3):
             for col in range(3):
                 if self.game_board[row][col] is None:
@@ -96,6 +97,13 @@ class TicTacToe:
                         return (row, col)
                     self.game_board[row][col] = None
 
+        # если не надо блокировать или победить за один ход, то робот делает любой ход
+        best_moves = [(0, 0), (0, 2), (2, 0), (2, 2), (1, 1)]  # приоритетные ходы: углы и центр (чтобы игрок не мог победить)
+        for move in best_moves:
+            row, col = move
+            if self.game_board[row][col] is None:
+                return (row, col)
+
         # если не надо блокировать или победить за один ход, то ai делает любой ход
         for row in range(3):
             for col in range(3):
@@ -105,10 +113,3 @@ class TicTacToe:
 root = tk.Tk()
 game = TicTacToe(root)
 root.mainloop()
-
-
-
-
-
-
-
